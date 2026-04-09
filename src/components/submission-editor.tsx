@@ -708,4 +708,21 @@ function PeopleSection({
                     : people.filter((_, currentIndex) => currentIndex !== index),
                 )
               }
-              className="rounded-full border border-rose-200 px-4 py
+              className="rounded-full border border-rose-200 px-4 py-3 text-sm font-semibold text-rose-700 transition hover:bg-rose-50"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => onChange([...people, emptyPerson()])}
+        className="mt-4 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800"
+      >
+        {addLabel}
+      </button>
+    </div>
+  );
+}
