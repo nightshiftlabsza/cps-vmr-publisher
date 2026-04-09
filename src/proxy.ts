@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const COOKIE_NAME = "vmr_auth";
 const PUBLIC_PATHS = ["/vmr", "/login", "/api/auth", "/uploads", "/_next", "/favicon", "/cps-logo"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow public routes
