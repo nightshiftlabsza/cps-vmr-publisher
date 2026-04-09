@@ -38,6 +38,11 @@ export async function GET(_: Request, { params }: UploadRouteProps) {
     return NextResponse.json({ error: "File not available." }, { status: 404 });
   }
 
+  // If the path is a full URL (Vercel Blob), redirect directly
+  if (relativePath.startsWith("https://")) {
+    return NextResponse.redirect(relativePath);
+  }
+
   const storage = getStorageService();
   const fileBuffer = await storage.readFile(relativePath);
 

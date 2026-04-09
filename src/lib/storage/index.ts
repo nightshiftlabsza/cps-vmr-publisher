@@ -1,7 +1,9 @@
 import { LocalStorageService } from "@/lib/storage/local-storage-service";
+import { VercelBlobStorageService } from "@/lib/storage/vercel-blob-storage-service";
 
 export function getStorageService() {
-  // TODO(storage): Swap this implementation for Vercel Blob or another provider
-  // when the prototype is integrated into the main deployment environment.
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    return new VercelBlobStorageService();
+  }
   return new LocalStorageService();
 }

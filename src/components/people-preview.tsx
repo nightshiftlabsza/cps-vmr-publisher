@@ -10,7 +10,7 @@ export function PeoplePreview({
   emptyLabel: string;
 }) {
   if (!people.length) {
-    return <span className="text-slate-400">{emptyLabel}</span>;
+    return <span className="text-text-muted">{emptyLabel}</span>;
   }
 
   return (
@@ -23,12 +23,12 @@ export function PeoplePreview({
               href={person.url}
               target="_blank"
               rel="noreferrer"
-              className="font-medium text-sky-700 underline decoration-sky-300 underline-offset-3"
+              className="font-medium text-accent underline decoration-accent/30 underline-offset-2 hover:decoration-accent"
             >
               {person.fullName}
             </a>
           ) : (
-            <span className="font-medium text-slate-700">{person.fullName}</span>
+            <span className="font-medium text-text-primary">{person.fullName}</span>
           )}
         </Fragment>
       ))}

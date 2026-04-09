@@ -1,18 +1,95 @@
 @import "tailwindcss";
 
+/* ── Light Mode (default) ── */
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --panel: #ffffff;
-  --panel-soft: rgba(255, 255, 255, 0.72);
-  --ring: rgba(14, 165, 233, 0.15);
+  --surface-primary: #f8fafc;
+  --surface-secondary: #ffffff;
+  --surface-tertiary: #f1f5f9;
+  --surface-invert: #0f172a;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-invert: #ffffff;
+
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
+  --border-strong: #cbd5e1;
+
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+  --accent-muted: rgba(13, 148, 136, 0.08);
+  --accent-ring: rgba(13, 148, 136, 0.15);
+
+  --success: #059669;
+  --success-muted: rgba(5, 150, 105, 0.08);
+  --warning: #d97706;
+  --warning-muted: rgba(217, 119, 6, 0.08);
+  --danger: #e11d48;
+  --danger-muted: rgba(225, 29, 72, 0.08);
+  --published: #7c3aed;
+  --published-muted: rgba(124, 58, 237, 0.08);
+}
+
+/* ── Dark Mode ── */
+.dark {
+  --surface-primary: #0c0f17;
+  --surface-secondary: #141821;
+  --surface-tertiary: #1c2030;
+  --surface-invert: #f8fafc;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-invert: #0f172a;
+
+  --border: #1e293b;
+  --border-subtle: #1c2030;
+  --border-strong: #334155;
+
+  --accent: #2dd4bf;
+  --accent-hover: #5eead4;
+  --accent-muted: rgba(45, 212, 191, 0.1);
+  --accent-ring: rgba(45, 212, 191, 0.2);
+
+  --success: #34d399;
+  --success-muted: rgba(52, 211, 153, 0.1);
+  --warning: #fbbf24;
+  --warning-muted: rgba(251, 191, 36, 0.1);
+  --danger: #fb7185;
+  --danger-muted: rgba(251, 113, 133, 0.1);
+  --published: #a78bfa;
+  --published-muted: rgba(167, 139, 250, 0.1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-panel: var(--panel);
-  --color-panel-soft: var(--panel-soft);
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-surface-invert: var(--surface-invert);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-invert: var(--text-invert);
+
+  --color-border-default: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-muted: var(--accent-muted);
+
+  --color-status-success: var(--success);
+  --color-status-success-muted: var(--success-muted);
+  --color-status-warning: var(--warning);
+  --color-status-warning-muted: var(--warning-muted);
+  --color-status-danger: var(--danger);
+  --color-status-danger-muted: var(--danger-muted);
+  --color-status-published: var(--published);
+  --color-status-published-muted: var(--published-muted);
+
   --font-sans: var(--font-manrope);
   --font-mono: var(--font-plex-mono);
 }
@@ -26,9 +103,10 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--surface-primary);
+  color: var(--text-primary);
   font-family: var(--font-manrope), sans-serif;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 a {
@@ -37,7 +115,7 @@ a {
 }
 
 ::selection {
-  background: rgba(14, 165, 233, 0.18);
+  background: var(--accent-ring);
 }
 
 button,

@@ -2,11 +2,30 @@ import type { SubmissionStatus } from "@prisma/client";
 
 import { cn } from "@/lib/ui";
 
-const STATUS_STYLES: Record<SubmissionStatus, string> = {
-  submitted: "border-slate-300 bg-slate-100 text-slate-700",
-  awaiting_youtube: "border-amber-300 bg-amber-100 text-amber-800",
-  ready_to_publish: "border-emerald-300 bg-emerald-100 text-emerald-800",
-  published: "border-violet-300 bg-violet-100 text-violet-800",
+const STATUS_CONFIG: Record<
+  SubmissionStatus,
+  { bg: string; text: string; dot: string }
+> = {
+  submitted: {
+    bg: "bg-surface-tertiary",
+    text: "text-text-secondary",
+    dot: "bg-text-muted",
+  },
+  awaiting_youtube: {
+    bg: "bg-status-warning-muted",
+    text: "text-status-warning",
+    dot: "bg-status-warning",
+  },
+  ready_to_publish: {
+    bg: "bg-status-success-muted",
+    text: "text-status-success",
+    dot: "bg-status-success",
+  },
+  published: {
+    bg: "bg-status-published-muted",
+    text: "text-status-published",
+    dot: "bg-status-published",
+  },
 };
 
 export function formatStatusLabel(status: SubmissionStatus) {
@@ -14,13 +33,16 @@ export function formatStatusLabel(status: SubmissionStatus) {
 }
 
 export function StatusBadge({ status }: { status: SubmissionStatus }) {
+  const config = STATUS_CONFIG[status];
   return (
     <span
       className={cn(
-        "inline-flex rounded-full border px-3 py-1 text-xs font-semibold capitalize tracking-[0.12em]",
-        STATUS_STYLES[status],
+        "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-medium capitalize",
+        config.bg,
+        config.text,
       )}
     >
+      <span className={cn("h-1.5 w-1.5 rounded-full", config.dot)} />
       {formatStatusLabel(status)}
     </span>
   );

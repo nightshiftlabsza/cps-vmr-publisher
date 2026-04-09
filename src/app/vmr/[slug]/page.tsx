@@ -37,22 +37,13 @@ export default async function PublicSubmissionPage({
 }: PublicSubmissionPageProps) {
   const { slug } = await params;
   const submission = await prisma.submission.findFirst({
-    where: {
-      slug,
-      status: "published",
-    },
+    where: { slug, status: "published" },
     include: {
-      people: {
-        orderBy: {
-          sortOrder: "asc",
-        },
-      },
+      people: { orderBy: { sortOrder: "asc" } },
     },
   });
 
-  if (!submission) {
-    notFound();
-  }
+  if (!submission) notFound();
 
   const uploadUrl = submission.storagePath
     ? `/uploads/${submission.id}/original`
@@ -62,22 +53,22 @@ export default async function PublicSubmissionPage({
     : null;
   const presenters = buildLinkedPeople(
     submission.people
-      .filter((person) => person.role === "presenter")
-      .map((person) => ({
-        fullName: person.fullName,
-        linkType: person.linkType,
-        handleOrUrl: person.handleOrUrl,
-        normalizedUrl: person.normalizedUrl,
+      .filter((p) => p.role === "presenter")
+      .map((p) => ({
+        fullName: p.fullName,
+        linkType: p.linkType,
+        handleOrUrl: p.handleOrUrl,
+        normalizedUrl: p.normalizedUrl,
       })),
   );
   const discussants = buildLinkedPeople(
     submission.people
-      .filter((person) => person.role === "discussant")
-      .map((person) => ({
-        fullName: person.fullName,
-        linkType: person.linkType,
-        handleOrUrl: person.handleOrUrl,
-        normalizedUrl: person.normalizedUrl,
+      .filter((p) => p.role === "discussant")
+      .map((p) => ({
+        fullName: p.fullName,
+        linkType: p.linkType,
+        handleOrUrl: p.handleOrUrl,
+        normalizedUrl: p.normalizedUrl,
       })),
   );
 
@@ -85,9 +76,12 @@ export default async function PublicSubmissionPage({
     <div className="space-y-5">
       <Link
         href="/vmr"
-        className="inline-flex text-sm font-medium text-gray-500 transition hover:text-gray-900"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-text-muted transition hover:text-text-primary"
       >
-        ← All VMRs
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        All VMRs
       </Link>
 
       <SubmissionPublicView
