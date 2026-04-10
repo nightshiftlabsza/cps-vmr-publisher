@@ -166,16 +166,21 @@ export function SubmissionEditor({
         }
 
         setState((c) => ({ ...c, currentStatus: result.status ?? c.currentStatus }));
-        setFeedback({
-          tone: "success",
-          message: result.message ?? (mode === "create" ? "Submission saved." : "Submission updated."),
-        });
 
         if (mode === "create" && result.id) {
-          router.push(`/admin/submissions/${result.id}`);
+          // Reset the form and show a friendly confirmation — don't send members to /admin
+          setFeedback({
+            tone: "success",
+            message: "Your VMR has been submitted for admin review. The team will publish it once it's approved.",
+          });
+          setSelectedFile(null);
           return;
         }
 
+        setFeedback({
+          tone: "success",
+          message: result.message ?? "Submission updated.",
+        });
         setSelectedFile(null);
         setYoutubeDraftValue(state.youtubeUrl ?? "");
         router.refresh();
@@ -469,7 +474,7 @@ export function SubmissionEditor({
         {/* ── Actions ── */}
         <div className="flex flex-wrap gap-3">
           <Button type="submit" disabled={isPending} size="lg">
-            {isPending ? "Saving..." : mode === "create" ? "Submit VMR" : "Save changes"}
+            {isPending ? "Submitting..." : mode === "create" ? "Submit for Approval" : "Save changes"}
           </Button>
 
           {mode === "edit" && state.id && (
@@ -666,3 +671,4 @@ function PeopleSection({
     </div>
   );
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
