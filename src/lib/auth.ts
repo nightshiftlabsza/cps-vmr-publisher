@@ -3,8 +3,14 @@ import { cookies } from "next/headers";
 const COOKIE_NAME = "vmr_auth";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
-function getAuthPassword(): string {
+export type UserRole = "member" | "admin";
+
+function getMemberPassword(): string {
   return process.env.AUTH_PASSWORD ?? "cps-vmr-local";
+}
+
+function getAdminPassword(): string {
+  return process.env.ADMIN_PASSWORD ?? "cps-vmr-admin";
 }
 
 function getAuthSecret(): string {
@@ -26,26 +32,36 @@ async function hmacSign(data: string, secret: string): Promise<string> {
     .join("");
 }
 
-export async function createAuthToken(): Promise<string> {
+/** Returns the role for the given password, or null if invalid. */
+export function verifyPassword(password: string): UserRole | null {
+  if (password === getAdminPassword()) return "admin";
+  if (password === getMemberPassword()) return "member";
+  return null;
+}
+
+/** Create a signed token encoding the role: `ts.role.sig` */
+export async function createAuthToken(role: UserRole): Promise<string> {
   const ts = Date.now().toString();
-  const sig = await hmacSign(ts, getAuthSecret());
-  return `${ts}.${sig}`;
+  const payload = `${ts}.${role}`;
+  const sig = await hmacSign(payload, getAuthSecret());
+  return `${payload}.${sig}`;
 }
 
-export async function validateAuthToken(token: string): Promise<boolean> {
-  const [ts, sig] = token.split(".");
-  if (!ts || !sig) return false;
+/** Validate token and return the role, or null if invalid/expired. */
+export async function validateAuthToken(token: string): Promise<UserRole | null> {
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  const [ts, role, sig] = parts;
+  if (!ts || !role || !sig) return null;
+  if (role !== "member" && role !== "admin") return null;
 
-  // Token older than 30 days
   const age = Date.now() - Number(ts);
-  if (Number.isNaN(age) || age > COOKIE_MAX_AGE * 1000) return false;
+  if (Number.isNaN(age) || age > COOKIE_MAX_AGE * 1000) return null;
 
-  const expectedSig = await hmacSign(ts, getAuthSecret());
-  return sig === expectedSig;
-}
+  const expectedSig = await hmacSign(`${ts}.${role}`, getAuthSecret());
+  if (sig !== expectedSig) return null;
 
-export function verifyPassword(password: string): boolean {
-  return password === getAuthPassword();
+  return role as UserRole;
 }
 
 export function getAuthCookieConfig(token: string) {
@@ -72,15 +88,25 @@ export function getClearAuthCookieConfig() {
   };
 }
 
-/** Check auth cookie — use in API routes. Returns true if valid. */
-export async function requireInternalAccess(): Promise<boolean> {
-  // Skip auth in development if no password is configured
-  if (!process.env.AUTH_PASSWORD) return true;
-
+/** Returns the role if the request is authenticated, or null if not. */
+export async function getSessionRole(): Promise<UserRole | null> {
+  if (!process.env.AUTH_PASSWORD) return "admin"; // dev shortcut: no password set = full access
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
-  if (!token) return false;
+  if (!token) return null;
   return validateAuthToken(token);
+}
+
+/** Returns true if authenticated (any role). Used in API routes. */
+export async function requireInternalAccess(): Promise<boolean> {
+  const role = await getSessionRole();
+  return role !== null;
+}
+
+/** Returns true if authenticated as admin. Used in admin API routes. */
+export async function requireAdminAccess(): Promise<boolean> {
+  const role = await getSessionRole();
+  return role === "admin";
 }
 
 export { COOKIE_NAME };

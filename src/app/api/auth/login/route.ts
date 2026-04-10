@@ -8,23 +8,18 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { password } = body as { password?: string };
 
-    if (!password || !verifyPassword(password)) {
-      return NextResponse.json(
-        { error: "Invalid password" },
-        { status: 401 },
-      );
+    const role = password ? verifyPassword(password) : null;
+
+    if (!role) {
+      return NextResponse.json({ error: "Invalid password" }, { status: 401 });
     }
 
-    const token = await createAuthToken();
+    const token = await createAuthToken(role);
     const cookieStore = await cookies();
-    const config = getAuthCookieConfig(token);
-    cookieStore.set(config);
+    cookieStore.set(getAuthCookieConfig(token));
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, role });
   } catch {
-    return NextResponse.json(
-      { error: "Login failed" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }
