@@ -100,6 +100,32 @@ export function SubmissionPublicView({
           {/* Video hero */}
           {youtubeUrl && <YouTubeEmbed url={youtubeUrl} title={title} />}
 
+          {/* People */}
+          {(presenters.length > 0 || discussants.length > 0) && (
+            <div className="flex flex-wrap gap-x-10 gap-y-3">
+              {presenters.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted mb-0.5">
+                    Case Presenter{presenters.length > 1 ? "s" : ""}
+                  </h3>
+                  <p className="text-sm text-text-secondary">
+                    <PeoplePreview people={presenters} emptyLabel="" />
+                  </p>
+                </div>
+              )}
+              {discussants.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted mb-0.5">
+                    Case Discussants
+                  </h3>
+                  <p className="text-sm text-text-secondary">
+                    <PeoplePreview people={discussants} emptyLabel="" />
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Whiteboard link */}
           {fileUrl && (
             <a
@@ -118,44 +144,15 @@ export function SubmissionPublicView({
             </a>
           )}
 
-          {/* Two-column details */}
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Left: Case details */}
-            <div className="space-y-4">
-              {noteParagraphs && (
-                <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-text-primary">
-                    Case Summary &amp; Teaching Points
-                  </h3>
-                  <div className="space-y-3 text-sm">{noteParagraphs}</div>
-                </div>
-              )}
+          {/* Case notes */}
+          {noteParagraphs && (
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-text-primary">
+                Case Summary &amp; Teaching Points
+              </h3>
+              <div className="space-y-3 text-sm">{noteParagraphs}</div>
             </div>
-
-            {/* Right: People */}
-            <div className="space-y-4">
-              {presenters.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold text-text-primary mb-1">
-                    Case Presenter{presenters.length > 1 ? "s" : ""}
-                  </h3>
-                  <p className="text-sm text-text-secondary">
-                    <PeoplePreview people={presenters} emptyLabel="" />
-                  </p>
-                </div>
-              )}
-              {discussants.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold text-text-primary mb-1">
-                    Case Discussants
-                  </h3>
-                  <p className="text-sm text-text-secondary">
-                    <PeoplePreview people={discussants} emptyLabel="" />
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
+          )}
         </div>
       )}
 
@@ -194,13 +191,4 @@ export function SubmissionPublicView({
               href={fileUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover"
-            >
-              Open uploaded file
-            </a>
-          )}
-        </div>
-      )}
-    </article>
-  );
-}
+              className="inline-flex items-center gap-2 rounded-lg b

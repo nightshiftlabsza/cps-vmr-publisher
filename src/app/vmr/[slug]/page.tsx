@@ -90,12 +90,4 @@ export default async function PublicSubmissionPage({
         sessionDateLabel={formatDisplayDate(submission.sessionDate)}
         chiefComplaint={submission.chiefComplaint}
         presenters={presenters}
-        discussants={discussants}
-        fileUrl={uploadUrl}
-        previewImageUrl={previewImageUrl}
-        notes={submission.notes}
-        youtubeUrl={submission.youtubeUrl}
-      />
-    </div>
-  );
-}
+        

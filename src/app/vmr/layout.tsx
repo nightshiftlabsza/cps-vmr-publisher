@@ -64,13 +64,4 @@ export default function PublicVmrLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="min-h-screen bg-surface-primary">
-      <CpsHeader />
-      <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6">
-        {children}
-      </main>
-      <CpsFooter />
-    </div>
-  );
-}
+  

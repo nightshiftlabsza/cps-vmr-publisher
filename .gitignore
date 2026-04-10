@@ -40,9 +40,4 @@ yarn-error.log*
 
 # local app data
 /storage
-/prisma/dev.db
-/prisma/dev.db-journal
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+/prisma/dev.
